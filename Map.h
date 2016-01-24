@@ -5,6 +5,7 @@
 #ifndef MAP
 #define MAP
 #include <string>
+#include <iostream>
 
 typedef std::string KeyType;
 typedef double ValueType;
@@ -13,6 +14,9 @@ class Map
 {
 public:
     Map();
+    ~Map();
+    Map(const Map& source);
+    Map& operator=(const Map& source);
     bool empty() const;
     int size() const;
     bool insert(const KeyType& key, const ValueType& value);
