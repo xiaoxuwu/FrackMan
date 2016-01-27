@@ -5,7 +5,6 @@
 #ifndef MAP
 #define MAP
 #include <string>
-#include <iostream>
 
 typedef std::string KeyType;
 typedef double ValueType;
