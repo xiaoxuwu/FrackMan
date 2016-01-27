@@ -39,4 +39,7 @@ private:
     int m_size;
 };
 
+bool combine(const Map& m1, const Map& m2, Map& result);
+void subtract(const Map& m1, const Map& m2, Map& result);
+
 #endif
