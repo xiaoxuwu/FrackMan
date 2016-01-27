@@ -168,8 +168,7 @@ int main()
         cout << "Value: " << testDouble << endl;
     }
     cout << "Karen's Tunes have finished printing." << endl;
-}
-    /*
+
     // test subtract() using what the spec says
     Map m1;
     m1.insert("Fred", 123);
@@ -300,7 +299,7 @@ int main()
 
     cout << "Yay your program works so far :D" << endl;
 }
-*/
+
 
 /*
 #include "Map.h"

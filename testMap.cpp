@@ -1,4 +1,4 @@
-/* PLACE IN NODE STRUCT
+/* PLACE IN NODE STRUCT, AND MAKE SURE # OF CONSTRUCT == DESTRUCTOR
 Node()
 {
     std::cerr << "CONSTRUCTOR" << std::endl;
@@ -8,47 +8,12 @@ Node()
     std::cerr << "DESTRUCTOR" << std::endl;
 }
 */
+
 #include <iostream>
 #include "Map.h"
 #include <cassert>
 
 using namespace std;
-
-bool combine(const Map& m1, const Map& m2, Map& result)
-{
-    bool toReturn = true;
-    KeyType key;
-    ValueType value;
-    int i;
-    //delete everything from result (if it is not empty)
-    for (i = 0; i < result.size(); i++)
-    {
-        result.get(i, key, value);
-        result.erase(key);
-    }
-    //Insert all values from m1
-    for (i = 0; i < m1.size(); i++)
-    {
-        m1.get(i, key ,value);
-        result.insert(key, value);
-    }
-    //Insert all values from m2, and delete those found to be the same key, diff value
-    for (i = 0; i < m2.size(); i++)
-    {
-        m2.get(i, key ,value);
-        if(result.insert(key, value) == false)
-        {
-            ValueType valueM1;
-            m1.get(key, valueM1);
-            if (value != valueM1)
-            {
-                result.erase(key);
-                toReturn = false;
-            }
-        }
-    }
-    return toReturn;
-}
 
 int main()
 {
@@ -82,6 +47,7 @@ int main()
     //Testing Assignment
     Map b;
     b = m;
+    b = b;
     b.swap(m);
     b.swap(m);
     assert(b.get(0, key, value) == true && key == "hello" && value == 1);
@@ -137,13 +103,63 @@ int main()
     Map comb2;
     comb2.insert("Lucy", 789);
     comb2.insert("Ricky", 321);
-
+    cout << "Combine test 1" << endl;
     Map comb3;
     assert(combine(comb1, comb2, comb3) == true);
-    assert(comb3.get(0, key, value) == true && key == "Ricky" && value == 321);
-    assert(comb3.get(1, key, value) == true && key == "Lucy" && value == 789);
-    assert(comb3.get(2, key, value) == true && key == "Ethel" && value == 456);
-    assert(comb3.get(3, key, value) == true && key == "Fred" && value == 123);
+    for (int i = 0; i < comb3.size(); i++)
+    {
+        comb3.get(i, key, value);
+        cout << i << ": "<< " KEY: " << key << " VALUE: " << value << endl;
+    }
+    cout << endl;
     assert(comb3.size() == 4);
+
+    Map comb4;
+    comb4.insert("Fred", 123);
+    comb4.insert("Ethel", 456);
+    comb4.insert("Lucy", 789);
+
+    Map comb5;
+    comb5.insert("Lucy", 654);
+    comb5.insert("Ricky", 321);
+    cout << "Combine test 2" << endl;
+    Map comb6;
+    assert(combine(comb4, comb5, comb6) == false);
+    for (int i = 0; i < comb6.size(); i++)
+    {
+        comb6.get(i, key, value);
+        cout << i << ": "<< " KEY: " << key << " VALUE: " << value << endl;
+    }
+    cout << endl;
+    assert(comb6.size() == 3);
+    cout << "Combine test 3" << endl;
+    assert(combine(comb1, comb2, comb1) == true);
+    for (int i = 0; i < comb1.size(); i++)
+    {
+        comb1.get(i, key, value);
+        cout << i << ": "<< " KEY: " << key << " VALUE: " << value << endl;
+    }
+
+    cout << "\nSubtract test 1" << endl;
+    Map comb7, comb8;
+    subtract(comb1, comb3, comb7);
+    assert(comb7.size() == 0);
+    subtract(comb2, comb2, comb2);
+    assert(comb2.size() == 0);
+    subtract(comb4, comb2, comb8);
+    for (int i = 0; i < comb8.size(); i++)
+    {
+        comb8.get(i, key, value);
+        cout << i << ": "<< " KEY: " << key << " VALUE: " << value << endl;
+    }
+    cout << "\nSubtract test 2" << endl;
+    subtract(comb4, comb5, comb8);
+    assert(comb8.size() == 2);
+    for (int i = 0; i < comb8.size(); i++)
+    {
+        comb8.get(i, key, value);
+        cout << i << ": "<< " KEY: " << key << " VALUE: " << value << endl;
+    }
+    cout << endl;
     cout << "All tests passed!" << endl;
 }
